@@ -39,7 +39,7 @@ namespace EasyNetQ.Scheduler
 
         public void Start()
         {
-            log.DebugWrite("Starting SchedulerService");
+            log.InfoWrite("Starting SchedulerService");
             bus.Subscribe<ScheduleMe>(schedulerSubscriptionId, OnMessage);
             bus.Subscribe<UnscheduleMe>(schedulerSubscriptionId, OnMessage);
 
@@ -49,7 +49,7 @@ namespace EasyNetQ.Scheduler
 
         public void Stop()
         {
-            log.DebugWrite("Stopping SchedulerService");
+            log.InfoWrite("Stopping SchedulerService");
             if (publishTimer != null)
             {
                 publishTimer.Dispose();

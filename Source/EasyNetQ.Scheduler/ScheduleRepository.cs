@@ -75,10 +75,12 @@ namespace EasyNetQ.Scheduler
             WithStoredProcedureCommand(dialect.SelectProcedureName, command =>
             {
                 var dateTime = now();
+                var purgeDate = now().AddDays(configuration.PurgeDelayDays);
                 AddParameter(command, dialect.RowsParameterName, configuration.MaximumScheduleMessagesToReturn, DbType.Int32);
                 AddParameter(command, dialect.StatusParameterName, 0, DbType.Int16);
                 AddParameter(command, dialect.WakeTimeParameterName, dateTime, DbType.DateTime);
                 AddParameter(command, dialect.InstanceNameParameterName, configuration.InstanceName ?? "", DbType.String);
+                AddParameter(command, dialect.PurgeDateParameterName, purgeDate, DbType.DateTime);
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -101,7 +103,7 @@ namespace EasyNetQ.Scheduler
                 }
             });
 
-            MarkItemsForPurge(scheduleMessageIds);
+            //MarkItemsForPurge(scheduleMessageIds);
 
             return scheduledMessages;
         }

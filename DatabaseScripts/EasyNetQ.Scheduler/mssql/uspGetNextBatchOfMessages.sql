@@ -17,6 +17,7 @@ CREATE PROCEDURE [dbo].[uspGetNextBatchOfMessages]
  @rows INT = 1000, 
  @status TINYINT = 0,
  @WakeTime DATETIME,
+ @purgeDate datetime = NULL,
  @InstanceName nvarchar(100) = ''
 AS
 -- NB: WITH statements require a ';' on the statement immediately previous
@@ -36,7 +37,8 @@ WITH Results as
 -- Performs the UPDATE and OUTPUTs the INSERTED. fields to the calling app
 UPDATE 
 	[dbo].WorkItemStatus 
-	SET Status = 2
+	SET Status = 2,
+		PurgeDate = @purgeDate
 OUTPUT 
 	INSERTED.WorkItemID as WorkItemId, 
 	2 as Status, 
